@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 typedef struct data {
     int number;
@@ -47,17 +48,44 @@ void postOrder(tree_node_t* node) {
     }
 }
 
+int nodeCount(tree_node_t *node) {
+    if (node == NULL) {
+        return 0;
+    }
+    return 1 + nodeCount(node->left) + nodeCount(node->right);
+}
+
+tree_node_t* insert(tree_node_t* node, int key) {
+    if(node==NULL) return createNewNode(key);
+    if(key < node->data.number)
+        node->left = insert(node->left,key);
+    else
+        node->right = insert(node->right,key);
+    return node;
+}
+
+bool contains(tree_node_t* node, int key) {
+    if (node==NULL) return false;
+    if (key == node->data.number) {
+        return true;
+    } else if (key > node->data.number) {
+        contains(node->right, key);
+    } else {
+        contains(node->left, key);
+    }
+}
+
 int main() {
     
-    tree_node_t *root = createNewNode(8);
-    root->left = createNewNode(3);
-    root->left->left = createNewNode(1);
-    root->left->right = createNewNode(6);
-    root->left->right->left = createNewNode(4);
-    root->left->right->right = createNewNode(7);
-    root->right = createNewNode(10);
-    root->right->right = createNewNode(14);
-    root->right->right->left = createNewNode(13);
+    tree_node_t *root = insert(root, 9);
+    insert(root, 15);
+    insert(root, 5);
+    insert(root, 20);
+    insert(root, 16);
+    insert(root, 8);
+    insert(root, 12);
+    insert(root, 3);
+    insert(root, 6);
     
     printf("Pre Order: ");
     preOrder(root);
@@ -69,6 +97,15 @@ int main() {
     
     printf("Post Order: ");
     postOrder(root);
+    printf("\n");
+    
+    printf("Node Counting: %d", nodeCount(root));
+    printf("\n");
+    
+    printf("Function contains should be 1: %d", contains(root, 5));
+    printf("\n");
+    
+    printf("Function contains should be 0: %d", contains(root, 13));
     printf("\n");
     
     exit(0);
