@@ -66,10 +66,11 @@ tree_node_t* insert(tree_node_t* node, int key) {
 }
 
 tree_node_t* contains(tree_node_t* node, int key) {
-    if (node==NULL) return NULL;
-    if (key == node->data.number) {
+    
+    if (node==NULL || key == node->data.number) 
         return node;
-    } else if (key > node->data.number) {
+    
+    if (key > node->data.number) {
         contains(node->right, key);
     } else {
         contains(node->left, key);
@@ -112,7 +113,6 @@ int main() {
         printf("Function contains should be NULL: %s", NULL);        
     }
     
-
     printf("\n");
     
     exit(0);
