@@ -57,17 +57,18 @@ int nodeCount(tree_node_t *node) {
 
 tree_node_t* insert(tree_node_t* node, int key) {
     if(node==NULL) return createNewNode(key);
+    
     if(key < node->data.number)
         node->left = insert(node->left,key);
-    else
+    else if(key > node->data.number)
         node->right = insert(node->right,key);
     return node;
 }
 
-bool contains(tree_node_t* node, int key) {
-    if (node==NULL) return false;
+tree_node_t* contains(tree_node_t* node, int key) {
+    if (node==NULL) return NULL;
     if (key == node->data.number) {
-        return true;
+        return node;
     } else if (key > node->data.number) {
         contains(node->right, key);
     } else {
@@ -80,6 +81,8 @@ int main() {
     tree_node_t *root = insert(root, 9);
     insert(root, 15);
     insert(root, 5);
+    insert(root, 20);
+    insert(root, 20);
     insert(root, 20);
     insert(root, 16);
     insert(root, 8);
@@ -102,10 +105,14 @@ int main() {
     printf("Node Counting: %d", nodeCount(root));
     printf("\n");
     
-    printf("Function contains should be 1: %d", contains(root, 5));
+    printf("Function contains should be 5: %d", contains(root, 5)->data.number);
     printf("\n");
     
-    printf("Function contains should be 0: %d", contains(root, 13));
+    if (contains(root, 13) == NULL) {
+        printf("Function contains should be NULL: %s", NULL);        
+    }
+    
+
     printf("\n");
     
     exit(0);
